@@ -1,0 +1,25 @@
+stages:
+  - build
+before_script:
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+  - yarn install
+build android publish:
+  stage: build
+  script:
+    - echo "const buildEnv = 'prod'\nexport { buildEnv }" >! build-env.ts
+    - ./buildapp/buildScript -android -clean && cd android && ./gradlew assembleRelease && cd .. && ./buildapp/buildScript  -android -publish -uploadPgy
+  only:
+    - /^android\/v.*$/
+  tags:
+    - minixls
+build android pgy:
+  stage: build
+  script:
+    - echo "const buildEnv = 'dev'\nexport { buildEnv }" >! build-env.ts
+    - ./buildapp/buildScript -android -clean && cd android && ./gradlew assembleRelease && cd .. && ./buildapp/buildScript  -android -uploadPgy
+  only:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /^build:android/
+  tags:
+    - minixls
