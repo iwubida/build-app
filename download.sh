@@ -1,0 +1,2 @@
+curl -o .gitlab-ci.yml https://raw.githubusercontent.com/iwubida/build-app/master/.gitlab-ci.yml
+curl -o build-app-gitlab-ci-rule.md https://raw.githubusercontent.com/iwubida/build-app/master/README.md
